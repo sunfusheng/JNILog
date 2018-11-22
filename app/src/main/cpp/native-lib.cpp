@@ -1,5 +1,4 @@
 #include <jni.h>
-#include <string>
 
 extern "C" {
 
@@ -22,20 +21,19 @@ JNIEnv *getJNIEnv() {
     return env;
 }
 
-jstring getStringFromJNI(JNIEnv *env, jclass clazz) {
-    LogD(TAG, "getStringFromJNI() is Called");
+jstring jniString(JNIEnv *env, jclass clazz) {
+    LogD(TAG, "jniString() is Called");
 
     LogD(TAG, "test LogD()");
     LogI(TAG, "test LogI()");
     LogW(TAG, "test LogW()");
     LogE(TAG, "test LogE()");
 
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
+    return env->NewStringUTF("jniString() is Called from C++");
 }
 
 static JNINativeMethod jni_methods_table[] = {
-        {"stringFromJNI", "()Ljava/lang/String;", (void *) getStringFromJNI}
+        {"stringFromJNI", "()Ljava/lang/String;", (void *) jniString}
 };
 
 static int jniRegisterNativeMethods(JNIEnv *env) {
@@ -67,7 +65,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 
     return JNI_VERSION_1_6;
 }
-
 
 void setDebug(jboolean debug) {
     JNIEnv *env = getJNIEnv();

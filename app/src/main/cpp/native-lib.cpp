@@ -1,47 +1,36 @@
 #include <jni.h>
 #include <string>
-#include <android/log.h>
 
 extern "C" {
 
-jstring getStringFromJNI(JNIEnv *env, jclass clazz) {
-    std::string hello = "Hello from C++, modified by sunfusheng.";
-    return env->NewStringUTF(hello.c_str());
-}
+static const char *TAG = "---> JNI";
+static const char *AndroidLogClassName = "com/sunfusheng/jnilog/demo/AndroidLog";
+static const char *JNILogWrapperClassName = "com/sunfusheng/jnilog/demo/JNILogWrapper";
+JavaVM *javaVM = NULL;
 
-static const char *className = "com/sunfusheng/jnilog/demo/AndroidLog";
+void setDebug(jboolean debug);
+void LogD(const char *tag, const char *msg);
+void LogI(const char *tag, const char *msg);
+void LogW(const char *tag, const char *msg);
+void LogE(const char *tag, const char *msg);
 
-void setDebug(JNIEnv *env, jclass clazz, jboolean debug) {
-
-}
-
-void LOGD(JNIEnv *env, jclass clazz, std::string tag, std::string msg) {
-}
-
-void LOGI(JNIEnv *env, jclass clazz, std::string tag, std::string msg) {
-
-}
-
-
-JavaVM *javaVM;
-
-void LOGW(const char *tag, const char *msg) {
+JNIEnv *getJNIEnv() {
     JNIEnv *env = NULL;
-    if (javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
-        return;
+    if (javaVM == NULL || javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        return NULL;
     }
-    jclass clazz = env->FindClass(className);
-    if (clazz == NULL) {
-        return;
-    }
-    jmethodID methodId = env->GetStaticMethodID(clazz, "logW",
-                                                "(Ljava/lang/String;Ljava/lang/String;)V");
-    env->CallStaticVoidMethod(clazz, methodId, env->NewStringUTF(tag), env->NewStringUTF(msg));
-    return;
+    return env;
 }
 
-void LOGE(JNIEnv *env, jclass clazz, std::string tag, std::string msg) {
+jstring getStringFromJNI(JNIEnv *env, jclass clazz) {
 
+    LogD(TAG, "test LogD()");
+    LogI(TAG, "test LogI()");
+    LogW(TAG, "test LogW()");
+    LogE(TAG, "test LogE()");
+
+    std::string hello = "Hello from C++";
+    return env->NewStringUTF(hello.c_str());
 }
 
 static JNINativeMethod jni_methods_table[] = {
@@ -49,14 +38,14 @@ static JNINativeMethod jni_methods_table[] = {
 };
 
 static int jniRegisterNativeMethods(JNIEnv *env) {
-    jclass clazz = env->FindClass("com/sunfusheng/jnilog/demo/JNILogWrapper");
+    jclass clazz = env->FindClass(JNILogWrapperClassName);
     if (clazz == NULL) {
         return JNI_ERR;
     }
 
     int result = 0;
     int methods_count = sizeof(jni_methods_table) / sizeof(JNINativeMethod);
-    if (env->RegisterNatives(clazz, jni_methods_table, methods_count) < 0) {
+    if (env->RegisterNatives(clazz, jni_methods_table, methods_count) != JNI_OK) {
         result = JNI_ERR;
     }
 
@@ -65,18 +54,61 @@ static int jniRegisterNativeMethods(JNIEnv *env) {
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-    __android_log_print(ANDROID_LOG_DEBUG, "---> JNI", "JNI_OnLoad() is called");
-
     javaVM = vm;
-    JNIEnv *env = NULL;
-    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+    LogD(TAG, "JNI_OnLoad() is called");
+
+    JNIEnv *env = getJNIEnv();
+    if (env == NULL) {
         return JNI_ERR;
     }
 
     jniRegisterNativeMethods(env);
 
-    LOGW("---> JNI", "test java logW!!!");
     return JNI_VERSION_1_6;
+}
+
+
+void setDebug(jboolean debug) {
+    JNIEnv *env = getJNIEnv();
+    if (env == NULL) {
+        return;
+    }
+    jclass clazz = env->FindClass(AndroidLogClassName);
+    if (clazz == NULL) {
+        return;
+    }
+    jmethodID methodId = env->GetStaticMethodID(clazz, "setDebug", "(Z)V");
+    env->CallStaticVoidMethod(clazz, methodId, debug);
+}
+
+void Log(const char *methodName, const char *tag, const char *msg) {
+    JNIEnv *env = getJNIEnv();
+    if (env == NULL) {
+        return;
+    }
+    jclass clazz = env->FindClass(AndroidLogClassName);
+    if (clazz == NULL) {
+        return;
+    }
+    jmethodID methodId = env->GetStaticMethodID(clazz, methodName,
+                                                "(Ljava/lang/String;Ljava/lang/String;)V");
+    env->CallStaticVoidMethod(clazz, methodId, env->NewStringUTF(tag), env->NewStringUTF(msg));
+}
+
+void LogD(const char *tag, const char *msg) {
+    Log("LogD", tag, msg);
+}
+
+void LogI(const char *tag, const char *msg) {
+    Log("LogI", tag, msg);
+}
+
+void LogW(const char *tag, const char *msg) {
+    Log("LogW", tag, msg);
+}
+
+void LogE(const char *tag, const char *msg) {
+    Log("LogE", tag, msg);
 }
 
 }

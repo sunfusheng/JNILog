@@ -14,7 +14,7 @@ public class AndroidLog {
         isDebug = debug;
     }
 
-    private static void log(int priority, String tag, String msg) {
+    private static void Log(int priority, String tag, String msg) {
         if (!isDebug || TextUtils.isEmpty(tag) || TextUtils.isEmpty(msg)) {
             return;
         }
@@ -35,19 +35,19 @@ public class AndroidLog {
         }
     }
 
-    public static void logD(String tag, String msg) {
-        log(Log.DEBUG, tag, msg);
+    public static void LogD(String tag, String msg) {
+        Log(Log.DEBUG, tag, msg);
     }
 
-    public static void logI(String tag, String msg) {
-        log(Log.INFO, tag, msg);
+    public static void LogI(String tag, String msg) {
+        Log(Log.INFO, tag, msg);
     }
 
-    public static void logW(String tag, String msg) {
-        log(Log.WARN, tag, msg);
+    public static void LogW(String tag, String msg) {
+        Log(Log.WARN, tag, msg);
     }
 
-    public static void logE(String tag, String msg) {
-        log(Log.ERROR, tag, msg);
+    public static void LogE(String tag, String msg) {
+        Log(Log.ERROR, tag, msg);
     }
 }

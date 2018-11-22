@@ -23,6 +23,7 @@ JNIEnv *getJNIEnv() {
 }
 
 jstring getStringFromJNI(JNIEnv *env, jclass clazz) {
+    LogD(TAG, "getStringFromJNI() is Called");
 
     LogD(TAG, "test LogD()");
     LogI(TAG, "test LogI()");

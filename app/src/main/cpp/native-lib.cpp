@@ -23,13 +23,8 @@ JNIEnv *getJNIEnv() {
     return env;
 }
 
-#define LTAG "---> LTAG"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LTAG, __VA_ARGS__)
-
 jstring jniString(JNIEnv *env, jclass clazz) {
     L::LogD(TAG, "jniString() is Called");
-
-    LOGD("1+1=%d", 2);
 
 //    L::LogD(TAG, "test LogD()");
 //    L::LogI(TAG, "test LogI()");

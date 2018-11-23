@@ -1,6 +1,6 @@
-//
-// Created by sunfusheng on 2018/11/22.
-//
+/**
+ * @author by sunfusheng on 2018/11/22
+ */
 
 #ifndef JNILOG_JNI_LOG1_H
 #define JNILOG_JNI_LOG1_H

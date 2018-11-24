@@ -2,7 +2,6 @@
  * @author by sunfusheng on 2018/11/22
  */
 
-#include <android/log.h>
 #include "jni_log.h"
 
 static const char *AndroidLogClassName = "com/sunfusheng/jnilog/demo/LogUtil";

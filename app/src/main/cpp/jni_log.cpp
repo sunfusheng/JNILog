@@ -5,27 +5,9 @@
 #include <android/log.h>
 #include "jni_log.h"
 
-static const char *AndroidLogClassName = "com/sunfusheng/jnilog/demo/AndroidLog";
-//JavaVM *javaVM = NULL;
-//
-//JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-//    javaVM = vm;
-//    return JNI_VERSION_1_6;
-//}
+static const char *AndroidLogClassName = "com/sunfusheng/jnilog/demo/LogUtil";
 
-JNIEnv *getJNIEnv() {
-    JNIEnv *env = NULL;
-    __android_log_print(ANDROID_LOG_DEBUG, "---> L", "111");
-    if (javaVM == NULL || javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
-        __android_log_print(ANDROID_LOG_DEBUG, "---> L", "222");
-        return NULL;
-    }
-    __android_log_print(ANDROID_LOG_DEBUG, "---> L", "333");
-    return env;
-}
-
-void L::setDebug(jboolean debug) {
-    JNIEnv *env = getJNIEnv();
+void setDebug(JNIEnv *env, jboolean debug) {
     if (env == NULL) {
         return;
     }
@@ -37,8 +19,7 @@ void L::setDebug(jboolean debug) {
     env->CallStaticVoidMethod(clazz, methodId, debug);
 }
 
- void Log(const char *methodName, const char *tag, const char *msg) {
-    JNIEnv *env = getJNIEnv();
+void Log(JNIEnv *env, const char *methodName, const char *tag, const char *msg) {
     if (env == NULL) {
         return;
     }
@@ -51,18 +32,18 @@ void L::setDebug(jboolean debug) {
     env->CallStaticVoidMethod(clazz, methodId, env->NewStringUTF(tag), env->NewStringUTF(msg));
 }
 
- void L::LogD(const char *tag, const char *msg) {
-    Log("LogD", tag, msg);
+void LogD(JNIEnv *env, const char *tag, const char *msg) {
+    Log(env, "LogD", tag, msg);
 }
 
- void L::LogI(const char *tag, const char *msg) {
-    Log("LogI", tag, msg);
+void LogI(JNIEnv *env, const char *tag, const char *msg) {
+    Log(env, "LogI", tag, msg);
 }
 
- void L::LogW(const char *tag, const char *msg) {
-    Log("LogW", tag, msg);
+void LogW(JNIEnv *env, const char *tag, const char *msg) {
+    Log(env, "LogW", tag, msg);
 }
 
- void L::LogE(const char *tag, const char *msg) {
-    Log("LogE", tag, msg);
+void LogE(JNIEnv *env, const char *tag, const char *msg) {
+    Log(env, "LogE", tag, msg);
 }

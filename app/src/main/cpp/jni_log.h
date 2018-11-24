@@ -2,25 +2,19 @@
  * @author by sunfusheng on 2018/11/22
  */
 
-#ifndef JNILOG_JNI_LOG1_H
-#define JNILOG_JNI_LOG1_H
+#ifndef _JNI_LOG_H_
+#define _JNI_LOG_H_
 
 #include <jni.h>
 
-static JavaVM *javaVM = NULL;
+void setDebug(JNIEnv *env, jboolean debug);
 
-class L {
+void LogD(JNIEnv *env, const char *tag, const char *msg);
 
-public:
-    static void setDebug(jboolean debug);
+void LogI(JNIEnv *env, const char *tag, const char *msg);
 
-    static void LogD(const char *tag, const char *msg);
+void LogW(JNIEnv *env, const char *tag, const char *msg);
 
-    static void LogI(const char *tag, const char *msg);
+void LogE(JNIEnv *env, const char *tag, const char *msg);
 
-    static void LogW(const char *tag, const char *msg);
-
-    static void LogE(const char *tag, const char *msg);
-};
-
-#endif //JNILOG_JNI_LOG1_H
+#endif

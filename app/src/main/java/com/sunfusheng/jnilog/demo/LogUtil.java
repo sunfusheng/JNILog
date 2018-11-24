@@ -6,7 +6,7 @@ import android.util.Log;
 /**
  * @author by sunfusheng on 2018/11/22
  */
-public class AndroidLog {
+public class LogUtil {
 
     private static boolean isDebug = true;
 

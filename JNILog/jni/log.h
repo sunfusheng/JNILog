@@ -5,13 +5,7 @@
 #ifndef _JNI_LOG_H_
 #define _JNI_LOG_H_
 
-#include <jni.h>
-
-extern JavaVM *javaVM;
-
-void onLoad(JavaVM *vm);
-
-void onUnload(JavaVM *vm);
+#include "global.h"
 
 void setDebug(jboolean debug);
 

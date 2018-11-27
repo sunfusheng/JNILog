@@ -1,4 +1,4 @@
-package com.sunfusheng.jnilog.demo;
+package com.sunfusheng.jnilog;
 
 /**
  * @author by sunfusheng on 2018/11/22
@@ -6,7 +6,7 @@ package com.sunfusheng.jnilog.demo;
 public class JNILogWrapper {
 
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("JNILog");
     }
 
     public static native String stringFromJNI();

@@ -1,4 +1,4 @@
-package com.sunfusheng.jnilog.demo;
+package com.sunfusheng.jnilog;
 
 import android.text.TextUtils;
 import android.util.Log;

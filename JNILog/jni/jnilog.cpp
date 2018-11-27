@@ -1,10 +1,9 @@
-#include <jni.h>
-#include "jni_log.h"
+#include "log.h"
 
 extern "C" {
 
 static const char *TAG = "---> JNI";
-static const char *JNILogWrapperClassName = "com/sunfusheng/jnilog/demo/JNILogWrapper";
+static const char *JNILogWrapperClassName = "com/sunfusheng/jnilog/JNILogWrapper";
 
 jstring jniString(JNIEnv *env, jclass clazz) {
     LogD(TAG, "jniString() is Called");
@@ -38,15 +37,9 @@ static int jniRegisterNativeMethods(JNIEnv *env) {
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-    if (vm == NULL) {
-        return JNI_ERR;
-    }
     onLoad(vm);
-    JNIEnv *env = NULL;
-    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
-        return JNI_ERR;
-    }
 
+    JNIEnv *env = getJNIEnv();
     if (env == NULL) {
         return JNI_ERR;
     }
@@ -57,7 +50,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     return JNI_VERSION_1_6;
 }
 
-JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved) {
+JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     onUnload(vm);
 }
 

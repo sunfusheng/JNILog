@@ -2,27 +2,9 @@
  * @author by sunfusheng on 2018/11/22
  */
 
-#include "jni_log.h"
+#include "log.h"
 
-static const char *LogUtilClassName = "com/sunfusheng/jnilog/demo/LogUtil";
-JavaVM *javaVM = NULL;
-
-void onLoad(JavaVM *vm) {
-    javaVM = vm;
-
-}
-
-void onUnload(JavaVM *vm) {
-
-}
-
-JNIEnv *getJNIEnv() {
-    JNIEnv *env = NULL;
-    if (javaVM == NULL || javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
-        return NULL;
-    }
-    return env;
-}
+static const char *LogUtilClassName = "com/sunfusheng/jnilog/LogUtil";
 
 void setDebug(jboolean debug) {
     JNIEnv *env = getJNIEnv();

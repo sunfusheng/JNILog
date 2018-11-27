@@ -5,7 +5,7 @@ extern "C" {
 static const char *TAG = "---> JNI";
 static const char *JNILogWrapperClassName = "com/sunfusheng/jnilog/JNILogWrapper";
 
-jstring jniString(JNIEnv *env, jclass clazz) {
+jstring stringFromJNI(JNIEnv *env, jclass clazz) {
     LogD(TAG, "jniString() is Called");
 
     LogD(TAG, "test LogD()");
@@ -13,11 +13,11 @@ jstring jniString(JNIEnv *env, jclass clazz) {
     LogW(TAG, "test LogW()");
     LogE(TAG, "test LogE()");
 
-    return env->NewStringUTF("jniString() is Called from C++");
+    return env->NewStringUTF("stringFromJNI() is Called from C++");
 }
 
 static JNINativeMethod jni_methods_table[] = {
-        {"stringFromJNI", "()Ljava/lang/String;", (void *) jniString}
+        {"stringFromJNI", "()Ljava/lang/String;", (void *) stringFromJNI}
 };
 
 static int jniRegisterNativeMethods(JNIEnv *env) {

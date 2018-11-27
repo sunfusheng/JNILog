@@ -7,14 +7,20 @@
 
 #include <jni.h>
 
-void setDebug(JNIEnv *env, jboolean debug);
+extern JavaVM *javaVM;
 
-void LogD(JNIEnv *env, const char *tag, const char *msg);
+void onLoad(JavaVM *vm);
 
-void LogI(JNIEnv *env, const char *tag, const char *msg);
+void onUnload(JavaVM *vm);
 
-void LogW(JNIEnv *env, const char *tag, const char *msg);
+void setDebug(jboolean debug);
 
-void LogE(JNIEnv *env, const char *tag, const char *msg);
+void LogD(const char *tag, const char *msg);
+
+void LogI(const char *tag, const char *msg);
+
+void LogW(const char *tag, const char *msg);
+
+void LogE(const char *tag, const char *msg);
 
 #endif

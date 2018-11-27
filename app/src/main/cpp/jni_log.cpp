@@ -4,13 +4,32 @@
 
 #include "jni_log.h"
 
-static const char *AndroidLogClassName = "com/sunfusheng/jnilog/demo/LogUtil";
+static const char *LogUtilClassName = "com/sunfusheng/jnilog/demo/LogUtil";
+JavaVM *javaVM = NULL;
 
-void setDebug(JNIEnv *env, jboolean debug) {
+void onLoad(JavaVM *vm) {
+    javaVM = vm;
+
+}
+
+void onUnload(JavaVM *vm) {
+
+}
+
+JNIEnv *getJNIEnv() {
+    JNIEnv *env = NULL;
+    if (javaVM == NULL || javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        return NULL;
+    }
+    return env;
+}
+
+void setDebug(jboolean debug) {
+    JNIEnv *env = getJNIEnv();
     if (env == NULL) {
         return;
     }
-    jclass clazz = env->FindClass(AndroidLogClassName);
+    jclass clazz = env->FindClass(LogUtilClassName);
     if (clazz == NULL) {
         return;
     }
@@ -18,11 +37,12 @@ void setDebug(JNIEnv *env, jboolean debug) {
     env->CallStaticVoidMethod(clazz, methodId, debug);
 }
 
-void Log(JNIEnv *env, const char *methodName, const char *tag, const char *msg) {
+void Log(const char *methodName, const char *tag, const char *msg) {
+    JNIEnv *env = getJNIEnv();
     if (env == NULL) {
         return;
     }
-    jclass clazz = env->FindClass(AndroidLogClassName);
+    jclass clazz = env->FindClass(LogUtilClassName);
     if (clazz == NULL) {
         return;
     }
@@ -31,18 +51,18 @@ void Log(JNIEnv *env, const char *methodName, const char *tag, const char *msg) 
     env->CallStaticVoidMethod(clazz, methodId, env->NewStringUTF(tag), env->NewStringUTF(msg));
 }
 
-void LogD(JNIEnv *env, const char *tag, const char *msg) {
-    Log(env, "LogD", tag, msg);
+void LogD(const char *tag, const char *msg) {
+    Log("LogD", tag, msg);
 }
 
-void LogI(JNIEnv *env, const char *tag, const char *msg) {
-    Log(env, "LogI", tag, msg);
+void LogI(const char *tag, const char *msg) {
+    Log("LogI", tag, msg);
 }
 
-void LogW(JNIEnv *env, const char *tag, const char *msg) {
-    Log(env, "LogW", tag, msg);
+void LogW(const char *tag, const char *msg) {
+    Log("LogW", tag, msg);
 }
 
-void LogE(JNIEnv *env, const char *tag, const char *msg) {
-    Log(env, "LogE", tag, msg);
+void LogE(const char *tag, const char *msg) {
+    Log("LogE", tag, msg);
 }

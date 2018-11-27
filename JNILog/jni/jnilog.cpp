@@ -52,6 +52,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 
 JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     onUnload(vm);
+    LogD(TAG, "JNI_OnUnload() is called");
 }
 
 }

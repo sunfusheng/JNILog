@@ -7,12 +7,6 @@ static const char *JNILogWrapperClassName = "com/sunfusheng/jnilog/JNILogWrapper
 
 jstring stringFromJNI(JNIEnv *env, jclass clazz) {
     LogD(TAG, "jniString() is Called");
-
-    LogD(TAG, "test LogD()");
-    LogI(TAG, "test LogI()");
-    LogW(TAG, "test LogW()");
-    LogE(TAG, "test LogE()");
-
     return env->NewStringUTF("stringFromJNI() is Called from C++");
 }
 
@@ -38,6 +32,7 @@ static int jniRegisterNativeMethods(JNIEnv *env) {
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     onLoad(vm);
+    LogD(TAG, "JNI_OnLoad() is called");
 
     JNIEnv *env = getJNIEnv();
     if (env == NULL) {
@@ -46,7 +41,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 
     jniRegisterNativeMethods(env);
 
-    LogD(TAG, "JNI_OnLoad() is called");
     return JNI_VERSION_1_6;
 }
 

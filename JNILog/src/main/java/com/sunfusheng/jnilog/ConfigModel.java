@@ -11,11 +11,11 @@ public class ConfigModel {
     public byte[] toBytes() {
         byte[] bytes = new byte[16];
         int pos = 0;
-        System.arraycopy(SerializeHelper.intToBytes(x), 0, bytes, pos, 4);
+        System.arraycopy(SerializeUtil.intToBytes(x), 0, bytes, pos, 4);
         pos += 4;
-        System.arraycopy(SerializeHelper.floatToBytes(y), 0, bytes, pos, 4);
+        System.arraycopy(SerializeUtil.floatToBytes(y), 0, bytes, pos, 4);
         pos += 4;
-        System.arraycopy(SerializeHelper.doubleToBytes(z), 0, bytes, pos, 8);
+        System.arraycopy(SerializeUtil.doubleToBytes(z), 0, bytes, pos, 8);
         return bytes;
     }
 
@@ -24,14 +24,14 @@ public class ConfigModel {
         byte[] result = new byte[8];
         System.arraycopy(bytes, pos, result, 0, 4);
         pos += 4;
-        this.x = SerializeHelper.bytesToInt(result);
+        this.x = SerializeUtil.bytesToInt(result);
 
         System.arraycopy(bytes, pos, result, 0, 4);
         pos += 4;
-        this.y = SerializeHelper.bytesToFloat(result);
+        this.y = SerializeUtil.bytesToFloat(result);
 
         System.arraycopy(bytes, pos, result, 0, 8);
-        this.z = SerializeHelper.bytesToDouble(result);
+        this.z = SerializeUtil.bytesToDouble(result);
     }
 
     @Override

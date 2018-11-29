@@ -12,7 +12,6 @@ typedef struct {
     double z;
 } Config;
 
-
 char *convertJByteArrayToCharPointer(JNIEnv *env, jbyteArray byteArray) {
     char *chars = NULL;
     jbyte *bytes;

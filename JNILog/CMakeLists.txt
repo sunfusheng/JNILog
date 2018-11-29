@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.4.1)
 set(SOURCE_SET
         jni/global.cpp
         jni/log.cpp
-        jni/jnilog.cpp
+        jni/JNILog.cpp
         )
 
 add_library(

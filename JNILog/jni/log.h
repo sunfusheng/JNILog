@@ -6,6 +6,7 @@
 #define _JNI_LOG_H_
 
 #include "global.h"
+#include <android/log.h>
 
 void setDebug(jboolean debug);
 

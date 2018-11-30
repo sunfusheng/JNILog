@@ -38,6 +38,7 @@ convertConfig(JNIEnv *env, jclass clazz, jbyteArray inputBytes, jdouble factor,
     char *data = convertJByteArrayToChars(env, inputBytes);
     Config config;
     memcpy(&config, data, sizeof(Config));
+    delete data;
 
     char log[128];
     sprintf(log, "输入配置：int x=%d, float y=%f, double z=%lf", config.x, config.y, config.z);

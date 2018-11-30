@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         sb.append(outputConfig.toString());
         sb.append("\n");
 
-        LogUtil.LogW("---> Java", sb.toString());
         tv.setText(sb);
     }
 

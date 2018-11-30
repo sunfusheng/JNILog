@@ -1,4 +1,6 @@
 #include <string.h>
+#include <stdio.h>
+
 #include "log.h"
 
 extern "C" {
@@ -12,15 +14,13 @@ typedef struct {
     double z;
 } Config;
 
-char *convertJByteArrayToCharPointer(JNIEnv *env, jbyteArray byteArray) {
-    char *chars = NULL;
-    jbyte *bytes;
-    bytes = env->GetByteArrayElements(byteArray, 0);
-    int chars_len = env->GetArrayLength(byteArray);
-    chars = new char[chars_len + 1];
-    memset(chars, 0, chars_len + 1);
-    memcpy(chars, bytes, chars_len);
-    chars[chars_len] = 0;
+char *convertJByteArrayToChars(JNIEnv *env, jbyteArray byteArray) {
+    jbyte *bytes = env->GetByteArrayElements(byteArray, 0);
+    int byteArrayLength = env->GetArrayLength(byteArray);
+    char *chars = new char[byteArrayLength + 1];
+    memset(chars, 0, (size_t) (byteArrayLength + 1));
+    memcpy(chars, bytes, (size_t) byteArrayLength);
+    chars[byteArrayLength] = 0;
     env->ReleaseByteArrayElements(byteArray, bytes, 0);
     return chars;
 }
@@ -31,41 +31,36 @@ JNIEXPORT jstring JNICALL stringFromJNI(JNIEnv *env, jclass clazz) {
 }
 
 JNIEXPORT void JNICALL
-convertConfigModel(JNIEnv *env, jclass clazz, jbyteArray inputBytes, jdouble factor,
-                   jbyteArray outputBytes) {
+convertConfig(JNIEnv *env, jclass clazz, jbyteArray inputBytes, jdouble factor,
+              jbyteArray outputBytes) {
     LogD(TAG, "printConfigModel() is Called");
 
-    char *data = convertJByteArrayToCharPointer(env, inputBytes);
+    char *data = convertJByteArrayToChars(env, inputBytes);
     Config config;
     memcpy(&config, data, sizeof(Config));
-    __android_log_print(ANDROID_LOG_DEBUG, TAG,
-                        "int x=%d, float y=%f, double z=%lf",
-                        config.x, config.y, config.z);
+
+    char log[128];
+    sprintf(log, "输入配置：int x=%d, float y=%f, double z=%lf", config.x, config.y, config.z);
+    LogD(TAG, log);
+
+    sprintf(log, "乘数因子：double factor=%lf", factor);
+    LogD(TAG, log);
 
     config.x *= factor;
     config.y *= factor;
     config.z *= factor;
 
-    jbyte *bytes = env->GetByteArrayElements(outputBytes, 0);
-    char *result = (char *) bytes;
-    memcpy(result, (char *) &config, sizeof(Config));
-    env->ReleaseByteArrayElements(outputBytes, bytes, 0);
+    sprintf(log, "输出配置：int x=%d, float y=%f, double z=%lf", config.x, config.y, config.z);
+    LogD(TAG, log);
 
-//    char paraByteArrays[bytesCount];
-//    memset(paraByteArrays, 0, bytesCount);
-//    jbyte *rParaBody = env->GetByteArrayElements(byteArray, 0);
-//    char *rParaData = (char *) rParaBody;
-//    memcpy(paraByteArrays, rParaData, bytesCount);
-//    env->ReleaseByteArrayElements(byteArray, rParaBody, 0);
-//
-//    memcpy(&config, &paraByteArrays, sizeof(Config));
-//    __android_log_print(ANDROID_LOG_DEBUG, "---> ", "int x=%d, float y=%f, double z=%lf", config.x,
-//                        config.y, config.z);
+    jbyte *bytes = env->GetByteArrayElements(outputBytes, 0);
+    memcpy(bytes, (char *) &config, sizeof(Config));
+    env->ReleaseByteArrayElements(outputBytes, bytes, 0);
 }
 
 static JNINativeMethod jni_methods_table[] = {
         {"stringFromJNI",      "()Ljava/lang/String;", (void *) stringFromJNI},
-        {"convertConfigModel", "([BD[B)V",             (void *) convertConfigModel},
+        {"convertConfigModel", "([BD[B)V",             (void *) convertConfig},
 };
 
 static int jniRegisterNativeMethods(JNIEnv *env) {

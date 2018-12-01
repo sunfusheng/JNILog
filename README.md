@@ -1,2 +1,2 @@
 # JNILog
-本地C++代码调用Java代码实现打印Log日志
+本地JNI层代码与Java代码实现互相调用，包括从Java层向JNI层传参，并从JNI层返回数据到Java层
